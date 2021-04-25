@@ -1,0 +1,1 @@
+int tableAdd(int *);
