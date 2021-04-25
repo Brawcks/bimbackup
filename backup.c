@@ -4,10 +4,27 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <time.h>
+#include "backup.h"
 
 #define NORMAL_COLOR "\x1B[0m"
 #define GREEN "\x1B[32m"
 #define BLUE "\x1B[34m"
+
+int main(int argc, char *argv[])
+{
+    double time_spent = 0.0;
+    clock_t begin = clock();
+
+    printf("%sStarting backup\n", NORMAL_COLOR);
+
+    list_dir_content(argv[1]);
+
+    printf("%s\n", NORMAL_COLOR);
+
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
+}
 
 void open_file(struct dirent *dir, char *path) {
     FILE *file = NULL;
@@ -60,20 +77,4 @@ void list_dir_content(char *path)
         }
     }
     closedir(d); // finally close the directory
-}
-
-int main(int argc, char *argv[])
-{
-    double time_spent = 0.0;
-    clock_t begin = clock();
-
-    printf("%sStarting backup\n", NORMAL_COLOR);
-
-    list_dir_content(argv[1]);
-
-    printf("%s\n", NORMAL_COLOR);
-
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
 }
