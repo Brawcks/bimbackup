@@ -10,6 +10,10 @@
 #define GREEN "\x1B[32m"
 #define BLUE "\x1B[34m"
 
+#define FILE_ARCHIVE "backup.bimbckp"
+#define MAX_FILE_NAME 1000
+#define MAX_LINE_LENGTH 10000
+
 int main(int argc, char *argv[])
 {
     double time_spent = 0.0;
@@ -26,6 +30,37 @@ int main(int argc, char *argv[])
     printf("The elapsed time is %f seconds", time_spent);
 }
 
+void save_content(FILE *file, char *filepath) {
+    long length;
+    int lines_in_file = countlines(file);
+    int i;
+    char str[MAX_LINE_LENGTH] = "";
+
+    printf("Open file : %s with %d lines\n", filepath, lines_in_file);
+
+    for (i = 0; i < lines_in_file; i++)
+    {
+        fgets(str, MAX_LINE_LENGTH, file);
+        printf("line : %s\n", str);
+    }
+    
+    
+
+}
+
+int countlines(FILE *file)
+{
+    int count = 1;
+    char c;
+
+    // Extract characters from file and store in character c
+    for (c = getc(file); c != EOF; c = getc(file))
+        if (c == '\n') // Increment count if this character is newline
+            count = count + 1;
+    
+    return count;
+}
+
 void open_file(struct dirent *dir, char *path) {
     FILE *file = NULL;
     char filepath[512];
@@ -39,7 +74,8 @@ void open_file(struct dirent *dir, char *path) {
 
     if (file != NULL)
     {
-        printf("File open : %s\n", filepath);
+        save_content(file, filepath);
+        fclose(file);
 
     } else {
         printf("Failed opening file");
